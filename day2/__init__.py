@@ -1,3 +1,4 @@
+from itertools import product
 
 
 class Day02(object):
@@ -100,10 +101,7 @@ class IntCodeB(object):
         self._stop_execution = False
         self.memory = None
         self.target_value = target_value
-        self.combinations_bank = []
-        for i in range(100):
-            for j in range(100):
-                self.combinations_bank.append((i, j))
+        self.combinations_bank = list(product(range(100), repeat=2))
         self.combinations_bank_index = 0
 
     def run_program(self):
