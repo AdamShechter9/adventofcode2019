@@ -2,6 +2,7 @@ import os
 import sys
 from day1 import Day01
 from day2 import Day02
+from day3 import Day03
 
 
 def read_file(day_n):
@@ -18,17 +19,16 @@ def read_file(day_n):
 def main():
     day_n = sys.argv[1]
     if day_n[:-1] == 'day1':
-        day1 = Day01(read_file)
-        if day_n[-1:] == 'a':
-            print(day1.run_solution1())
-        elif day_n[-1:] == 'b':
-            print(day1.run_solution2())
+        day = Day01(read_file)
     elif day_n[:-1] == 'day2':
-        day2 = Day02(read_file)
-        if day_n[-1:] == 'a':
-            print(day2.run_solution1())
-        elif day_n[-1:] == 'b':
-            print(day2.run_solution2())
+        day = Day02(read_file)
+    elif day_n[:-1] == 'day3':
+        day = Day03(read_file)
+
+    if day_n[-1:] == 'a':
+        print(day.run_solution1())
+    elif day_n[-1:] == 'b':
+        print(day.run_solution2())
 
 
 if __name__ == '__main__':

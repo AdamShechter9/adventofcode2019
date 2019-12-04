@@ -12,7 +12,6 @@ class Day02(object):
         """
         int_code_computer = IntCode(self.data)
         exit_code_value = int_code_computer.run_program()
-        # print(int_code_computer)
         return exit_code_value
 
     def run_solution2(self):
@@ -21,7 +20,6 @@ class Day02(object):
         """
         int_code_computer = IntCodeB(self.data, 19690720)
         exit_code_value = int_code_computer.run_program()
-        print(int_code_computer)
         return exit_code_value
 
 
@@ -66,7 +64,7 @@ class IntCode(object):
         n2 = self.memory[self.memory[self._cursor + 2]]
         position = self.memory[self._cursor + 3]
         self.memory[position] = n1 + n2
-        print(f'Cursor: {self._cursor}\tAssigning position {position} with value {n1 + n2}')
+        # print(f'Cursor: {self._cursor}\tAssigning position {position} with value {n1 + n2}')
         return
 
     def mult_operation(self):
@@ -118,9 +116,9 @@ class IntCodeB(object):
                 if result == self.target_value:
                     print('#' * 50)
                     print('FOUND RESULT')
+                    print(f'result: {result}\tcursor: {self._cursor}')
                     return result
             self._halt = False
-            print(f'result: {result}\tcursor: {self._cursor}')
             # response = input('next set')
         return result
 
@@ -157,7 +155,7 @@ class IntCodeB(object):
         n2 = self.memory[self.memory[self._cursor + 2]]
         position = self.memory[self._cursor + 3]
         self.memory[position] = n1 + n2
-        print(f'Cursor: {self._cursor}\tAssigning position {position} with value {n1} + {n2} = {n1 + n2}')
+        # print(f'Cursor: {self._cursor}\tAssigning position {position} with value {n1} + {n2} = {n1 + n2}')
         return
 
     def mult_operation(self):
@@ -170,7 +168,7 @@ class IntCodeB(object):
         n2 = self.memory[self.memory[self._cursor + 2]]
         position = self.memory[self._cursor + 3]
         self.memory[position] = n1 * n2
-        print(f'Cursor: {self._cursor}\tAssigning position {position} with value {n1} * {n2} = {n1 * n2}')
+        # print(f'Cursor: {self._cursor}\tAssigning position {position} with value {n1} * {n2} = {n1 * n2}')
         return
 
     def halt(self):
