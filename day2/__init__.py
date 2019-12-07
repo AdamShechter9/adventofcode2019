@@ -31,8 +31,7 @@ class IntCode(object):
 
     def run_program(self):
         self.memory_init()
-        for i in range(0, len(self.memory), 4):
-            self._cursor = i
+        while True:
             self.opcode(self.memory[self._cursor])
             if self._halt:
                 break
@@ -60,11 +59,12 @@ class IntCode(object):
         and the third indicates the position at which the output should be stored.
         :return:
         """
-        n1 = self.memory[self.memory[self._cursor + 1]]
-        n2 = self.memory[self.memory[self._cursor + 2]]
-        position = self.memory[self._cursor + 3]
-        self.memory[position] = n1 + n2
+        arg1 = self.memory[self.memory[self._cursor + 1]]
+        arg2 = self.memory[self.memory[self._cursor + 2]]
+        arg3 = self.memory[self._cursor + 3]
+        self.memory[arg3] = arg1 + arg2
         # print(f'Cursor: {self._cursor}\tAssigning position {position} with value {n1 + n2}')
+        self._cursor += 4
         return
 
     def mult_operation(self):
@@ -73,11 +73,12 @@ class IntCode(object):
         Again, the three integers after the opcode indicate where the inputs and outputs are, not their values.
         :return:
         """
-        n1 = self.memory[self.memory[self._cursor + 1]]
-        n2 = self.memory[self.memory[self._cursor + 2]]
-        position = self.memory[self._cursor + 3]
-        self.memory[position] = n1 * n2
-        print(f'Cursor: {self._cursor}\tAssigning position {position} with value {n1 * n2}')
+        arg1 = self.memory[self.memory[self._cursor + 1]]
+        arg2 = self.memory[self.memory[self._cursor + 2]]
+        arg3 = self.memory[self._cursor + 3]
+        self.memory[arg3] = arg1 * arg2
+        print(f'Cursor: {self._cursor}\tAssigning position {arg3} with value {arg1 * arg2}')
+        self._cursor += 4
         return
 
     def halt(self):
