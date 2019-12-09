@@ -5,6 +5,7 @@ from day2 import Day02
 from day3 import Day03
 from day4 import Day04
 from day5 import Day05
+from day6 import Day06
 
 
 def read_file(day_n):
@@ -30,6 +31,8 @@ def main():
         day = Day04()
     elif day_n[:-1] == 'day5':
         day = Day05(read_file)
+    elif day_n[:-1] == 'day6':
+        day = Day06(read_file)
 
     if day_n[-1:] == 'a':
         print(day.run_solution1())

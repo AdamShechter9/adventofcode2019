@@ -18,6 +18,7 @@ class Day05(object):
         """
         :return:
         """
+        print('Enter 1 for input')
         intcode_comp = IntCode2(self.data)
         intcode_comp.run_program()
         return
@@ -26,6 +27,9 @@ class Day05(object):
         """
         :return:
         """
+        print('Enter 5 for input')
+        intcode_comp = IntCode2(self.data)
+        intcode_comp.run_program()
         return
 
 
