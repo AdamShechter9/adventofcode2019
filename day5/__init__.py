@@ -114,13 +114,16 @@ class IntCode2(object):
             self._cursor += 4
         return
 
-    def input_operation(self, arg_mode):
+    def input_operation(self, arg_mode, input_value=None):
         """
         Opcode 3 takes a single integer as input and saves it to the address given by its only parameter.
         For example, the instruction 3,50 would take an input value and store it at address 50.
         :return:
         """
-        number_input = input('Please enter integer input: ')
+        if input_value is None:
+            number_input = input('Please enter integer input: ')
+        else:
+            number_input = input_value
         int_input = int(number_input)
         arg1 = self.memory[self._cursor + 1]
         self.memory[arg1] = int_input
@@ -143,7 +146,7 @@ class IntCode2(object):
         print(f'REQUESTED: OUTPUT {output_number}')
         print('*'*50)
         self._cursor += 2
-        return
+        return output_number
 
     def jump_if_true(self, arg_mode):
         """

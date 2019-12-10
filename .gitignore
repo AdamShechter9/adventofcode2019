@@ -2,5 +2,3 @@
 .gitignore
 .idea/
 __pycache__/
-day1/__pycache__/
-day2/__pycache__/
