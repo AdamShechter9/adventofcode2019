@@ -7,6 +7,8 @@ from day4 import Day04
 from day5 import Day05
 from day6 import Day06
 from day7 import Day07
+from day8 import Day08
+
 
 def read_file(day_n):
     file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), f'{day_n}', 'input.txt')
@@ -35,6 +37,8 @@ def main():
         day = Day06(read_file)
     elif day_n[:-1] == 'day7':
         day = Day07(read_file)
+    elif day_n[:-1] == 'day8':
+        day = Day08(read_file)
 
     if day_n[-1:] == 'a':
         print(day.run_solution1())
