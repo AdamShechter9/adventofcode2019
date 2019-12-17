@@ -260,9 +260,9 @@ class IntCode9(object):
         return output_str
 
 
-class UnknownOperationException(BaseException):
+class UnknownOperationException(Exception):
     pass
 
 
-class NegativeMemoryAddressException(BaseException):
+class NegativeMemoryAddressException(Exception):
     pass

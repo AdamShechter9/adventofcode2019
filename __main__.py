@@ -9,6 +9,7 @@ from day6 import Day06
 from day7 import Day07
 from day8 import Day08
 from day9 import Day09
+from day10 import Day10
 
 
 def read_file(day_n):
@@ -42,6 +43,8 @@ def main():
         day = Day08(read_file)
     elif day_n[:-1] == 'day9':
         day = Day09(read_file)
+    elif day_n[:-1] == 'day10':
+        day = Day10(read_file)
 
     if day_n[-1:] == 'a':
         print(day.run_solution1())
