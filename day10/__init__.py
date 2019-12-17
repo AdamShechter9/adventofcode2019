@@ -123,6 +123,86 @@ class AsteroidMonitoringStation(object):
         greedy_index = -1
         greedy_max = -1
         for current_asteroid in self.asteroid_answer:
+            print(f'Current Asteroid Evaluated: {current_asteroid}')
+            asteroids_coords_bank = list(self.asteroid_answer.keys())
+            # Remove current asteroid from bank
+            asteroids_coords_bank.remove(current_asteroid)
+            ordered_angle_list = []
+            for coords in asteroids_coords_bank:
+                total_x = coords[0] - current_asteroid[0]
+                total_y = coords[1] - current_asteroid[1]
+                degrees_angle = math.degrees(math.atan2(total_x, total_y))
+                line_length_from_origin = math.sqrt(pow(total_x, 2) + pow(total_y, 2))
+                ordered_angle_list.append((coords, round(degrees_angle, 3), round(line_length_from_origin, 3)))
+            ordered_angle_list.sort(key=itemgetter(1, 2), reverse=True)
+            visible_count = 0
+            evaluated_angles_bank = []
+            for i, coord in enumerate(ordered_angle_list):
+                if coord[1] in evaluated_angles_bank:
+                    continue
+                else:
+                    evaluated_angles_bank.append(coord[1])
+                visible_count += 1
+            print(f'Visible Asteroid Count: {visible_count}')
+            if visible_count > greedy_max:
+                greedy_max = visible_count
+                greedy_index = current_asteroid
+        return greedy_index, greedy_max
+
+    def calculate_vaporization_order(self, station_coords):
+        asteroids_coords_bank = list(self.asteroid_answer.keys())
+        asteroids_coords_bank.remove(station_coords)
+        ordered_angle_list = []
+        for coords in asteroids_coords_bank:
+            total_x = coords[0] - station_coords[0]
+            total_y = coords[1] - station_coords[1]
+            degrees_angle = math.degrees(math.atan2(total_x, total_y))
+            line_length_from_origin = math.sqrt(pow(total_x, 2) + pow(total_y, 2))
+            ordered_angle_list.append((coords, round(degrees_angle, 3), round(line_length_from_origin, 3)))
+        ordered_angle_list.sort(key=itemgetter(1, 2), reverse=True)
+        coordinate_bank = []
+        current_index = 0
+        current_angle = 180
+        while True:
+            current_angle_coords = list(filter(lambda x: x[1] == current_angle, ordered_angle_list))
+            current_angle_coords.sort(key=itemgetter(2), reverse=False)
+            coordinate_bank.append(current_angle_coords[0])
+            ordered_angle_list.remove(current_angle_coords[0])
+            if len(ordered_angle_list) == 1:
+                coordinate_bank.append(ordered_angle_list[0])
+                ordered_angle_list.remove(ordered_angle_list[0])
+                break
+            if current_index < len(ordered_angle_list):
+                try:
+                    current_angle = ordered_angle_list[current_index + len(current_angle_coords) - 1][1]
+                    current_index += len(current_angle_coords) - 1
+                except IndexError:
+                    current_index = 0
+                    current_angle = ordered_angle_list[0][1]
+            else:
+                current_index = 0
+                current_angle = ordered_angle_list[0][1]
+        for i, point_tuple in enumerate(coordinate_bank):
+            print(f'{i+1}\tcoord: {point_tuple[0]}\tangle: {point_tuple[1]}\tlength: {point_tuple[2]}')
+            coord = point_tuple[0]
+            self.asteroid_map[coord[1]][coord[0]] = str(i + 1)
+        for line in self.asteroid_map:
+            for c in line:
+                str1 = c + (' ' * (3 - len(c)))
+                print(f'{str1}', end='')
+        print()
+        return coordinate_bank[199]
+
+    def calculate_asteroid_line_of_sight2(self):
+        """
+        Inefficient solution using grid type calculations and stepping to arrive at answer.  It passes all tests.
+        After putting this together and encountering part 2,
+        I realized it's better to use trigonometry to figure out angles using to arrive at answer.
+        :return:
+        """
+        greedy_index = -1
+        greedy_max = -1
+        for current_asteroid in self.asteroid_answer:
             asteroids_coords_bank = list(self.asteroid_answer.keys())
             # Remove current asteroid from bank
             asteroids_coords_bank.remove(current_asteroid)
@@ -191,13 +271,10 @@ class AsteroidMonitoringStation(object):
                     fraction1 = fractions.Fraction(abs(total_x), abs(total_y))
                     step_x = fraction1.numerator
                     step_y = fraction1.denominator
-                    if total_x < 0 and step_x > 0:
-                        step_x *= -1
-                    if total_y < 0 and step_y > 0:
-                        step_y *= -1
+                    step_x = step_x * -1 if total_x < 0 and step_x > 0 else step_x
+                    step_y = step_y * -1 if total_y < 0 and step_y > 0 else step_y
                     print(f'Calculating angles\tstep x: {step_x}\t step y: {step_y}')
                     steps_needed = abs(total_x // step_x)
-
                     for i in range(1, steps_needed):
                         curr_x = i * step_x
                         curr_y = i * step_y
@@ -219,47 +296,3 @@ class AsteroidMonitoringStation(object):
                 greedy_index = current_asteroid
         print(self.asteroid_answer)
         return greedy_index, greedy_max
-
-    def calculate_vaporization_order(self, station_coords):
-        asteroids_coords_bank = list(self.asteroid_answer.keys())
-        asteroids_coords_bank.remove(station_coords)
-        ordered_angle_list = []
-        for coords in asteroids_coords_bank:
-            total_x = coords[0] - station_coords[0]
-            total_y = coords[1] - station_coords[1]
-            degrees_angle = math.degrees(math.atan2(total_x, total_y))
-            line_length_from_origin = math.sqrt(pow(total_x, 2) + pow(total_y, 2))
-            ordered_angle_list.append((coords, round(degrees_angle, 3), round(line_length_from_origin, 3)))
-        ordered_angle_list.sort(key=itemgetter(1, 2), reverse=True)
-        coordinate_bank = []
-        current_index = 0
-        current_angle = 180
-        while True:
-            current_angle_coords = list(filter(lambda x: x[1] == current_angle, ordered_angle_list))
-            current_angle_coords.sort(key=itemgetter(2), reverse=False)
-            coordinate_bank.append(current_angle_coords[0])
-            ordered_angle_list.remove(current_angle_coords[0])
-            if len(ordered_angle_list) == 1:
-                coordinate_bank.append(ordered_angle_list[0])
-                ordered_angle_list.remove(ordered_angle_list[0])
-                break
-            if current_index < len(ordered_angle_list):
-                try:
-                    current_angle = ordered_angle_list[current_index + len(current_angle_coords) - 1][1]
-                    current_index += len(current_angle_coords) - 1
-                except IndexError:
-                    current_index = 0
-                    current_angle = ordered_angle_list[0][1]
-            else:
-                current_index = 0
-                current_angle = ordered_angle_list[0][1]
-        for i, point_tuple in enumerate(coordinate_bank):
-            print(f'{i+1}\tcoord: {point_tuple[0]}\tangle: {point_tuple[1]}\tlength: {point_tuple[2]}')
-            coord = point_tuple[0]
-            self.asteroid_map[coord[1]][coord[0]] = str(i + 1)
-        for line in self.asteroid_map:
-            for c in line:
-                str1 = c + (' ' * (3 - len(c)))
-                print(f'{str1}', end='')
-        print()
-        return coordinate_bank[199]
